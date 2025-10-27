@@ -15,16 +15,23 @@ pipeline {
         bat 'composer install --no-interaction --prefer-dist'
       }
     }
-   stage('Run Tests') {
-        steps {
-            bat '''
-            if exist phpunit.xml (
-                vendor\\bin\\phpunit --testdox
+  stage('Run Tests') {
+      steps {
+        bat '''
+          if exist phpunit.xml (
+            echo "phpunit.xml found — running tests..."
+            php vendor\\phpunit\\phpunit\\phpunit --testdox
+            if errorlevel 1 (
+              echo "Unit tests FAILED"
+              exit /b 1
             ) else (
-                echo No tests
+              echo "Unit tests PASSED"
             )
-            '''
-        }
+          ) else (
+            echo "No phpunit.xml found — skipping tests"
+          )
+        '''
+      }
     }
     stage('Build Docker Image') {
       steps {

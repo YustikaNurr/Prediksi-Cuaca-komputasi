@@ -15,26 +15,29 @@ pipeline {
         bat 'composer install --no-interaction --prefer-dist'
       }
     }
-    stage('Run Tests') {
-      steps {
-        bat 'if [ -f phpunit.xml ]; then vendor/bin/phpunit --testdox || true; else echo "No tests"; fi'
-      }
+   stage('Run Tests') {
+        steps {
+            bat '''
+            if exist phpunit.xml (
+                vendor\\bin\\phpunit --testdox
+            ) else (
+                echo No tests
+            )
+            '''
+        }
     }
     stage('Build Docker Image') {
       steps {
-        script {
-          docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
-        }
+        bat """docker build -t ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ."""
       }
     }
     stage('Push Docker Image') {
       steps {
-        script {
-          docker.withRegistry(REGISTRY, REGISTRY_CREDENTIALS) {
-            def tag = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
-            docker.image(tag).push()
-            docker.image(tag).push('latest')
-          }
+        withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+          bat """docker login -u %USER% -p %PASS%"""
+          bat """docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"""
+          bat """docker tag ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ${env.IMAGE_NAME}:latest"""
+          bat """docker push ${env.IMAGE_NAME}:latest"""
         }
       }
     }

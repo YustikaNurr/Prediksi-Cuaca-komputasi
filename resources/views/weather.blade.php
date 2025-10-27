@@ -41,7 +41,7 @@
 
     <!-- Prakiraan 7 Hari -->
     @isset($daily)
-        <h4 class="text-center mb-4 fade-in">📅 Prakiraan 7 Hari ke Depan</h4>
+        <h4 class="text-center mb-4 fade-in">📅 Perkiraan 7 Hari ke Depan</h4>
         <div class="row justify-content-center">
             @foreach ($daily['time'] as $i => $tanggal)
                 <div class="col-md-3 col-sm-6 mb-4 fade-in">

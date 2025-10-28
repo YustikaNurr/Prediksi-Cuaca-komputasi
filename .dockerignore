@@ -1,0 +1,39 @@
+# --- Laravel core ---
+vendor/
+node_modules/
+storage/logs/
+storage/framework/cache/data/
+storage/framework/sessions/
+storage/framework/views/
+
+# --- Environment & security ---
+.env
+.env.*
+!.env.example
+
+# --- Git ---
+.git
+.gitignore
+.gitattributes
+
+# --- Build & IDE noise ---
+/.idea
+/.vscode
+/.DS_Store
+Thumbs.db
+
+# --- Composer & npm artifacts ---
+composer.lock
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+package-lock.json
+
+# --- Docker itself ---
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# --- Test / CI files (opsional, kalau tidak ingin ikut ke image) ---
+/tests
+/phpunit.xml
